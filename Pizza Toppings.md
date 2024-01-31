@@ -21,6 +21,32 @@ Key questions, such as:
 
 ### Data Analysis
 If use Import, some of the variables will be strings rather than numeric so need to use DATA step.
+Code:
+data pizza;
+    infile 'E:\Users\bxw190014\Desktop\sas Hw1\Pizza(3).csv' firstobs=2 DSD Missover; 
+    input SurveyNum Arugula PineNut Squash Shrimp Eggplant;  
+run;
+proc print data = pizza;
+run;
+
+/*calculate avg ratings using proc means*/
+proc means data=Pizza mean;
+var Arugula PineNut Squash Shrimp Eggplant; 
+output out=AvgRatings mean=;
+run;
+/*rename variables and create final dataset*/
+data AvgRatings;
+set AvgRatings;
+
+/*Reshape the data*/
+array Toppings[5] Arugula PineNut Squash Shrimp Eggplant;
+do i = 1 to dim(Toppings);
+	Topping = vname(Toppings[i]);
+	AvgRating = Toppings[i];
+	output;
+end;
+drop i Arugula PineNut Squash Shrimp Eggplant _type_ _freq_;
+run;
 
 ### Results/Findings
 
